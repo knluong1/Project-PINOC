@@ -3,330 +3,674 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project PINOC - Motion Capture Tool Comparison</title>
+<title>Project PINOC - Motion Capture Tool Comparison & Marketing Analysis</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0a0a0f; color: #e0e0e0; line-height: 1.6; }
 
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: #0a0a0f;
-    color: #e0e0e0;
-    line-height: 1.6;
-  }
+  /* Header */
+  header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); padding: 40px 24px 20px; text-align: center; border-bottom: 2px solid #e94560; }
+  header h1 { font-size: 2.2rem; font-weight: 700; color: #fff; letter-spacing: 1px; }
+  header p { color: #a0a0b8; margin-top: 6px; font-size: 1rem; }
 
-  header {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    padding: 48px 24px;
-    text-align: center;
-    border-bottom: 2px solid #e94560;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+  /* Main Tabs */
+  .main-tabs { display: flex; justify-content: center; gap: 0; padding: 0 24px; margin-top: 16px; }
+  .main-tab { padding: 10px 32px; background: transparent; border: none; color: #a0a0b8; font-size: 1rem; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+  .main-tab:hover { color: #fff; }
+  .main-tab.active { color: #e94560; border-bottom-color: #e94560; }
 
-  header h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 1px;
-  }
+  /* Sub-nav */
+  nav { background: #12121a; padding: 12px 24px; position: sticky; top: 0; z-index: 99; border-bottom: 1px solid #222; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  nav a { color: #a0a0b8; text-decoration: none; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; border: 1px solid #333; }
+  nav a:hover, nav a.active-link { color: #fff; background: #e94560; border-color: #e94560; }
 
-  header p {
-    color: #a0a0b8;
-    margin-top: 8px;
-    font-size: 1rem;
-  }
-
-  /* Navigation */
-  nav {
-    background: #12121a;
-    padding: 12px 24px;
-    position: sticky;
-    top: 0;
-    z-index: 99;
-    border-bottom: 1px solid #222;
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  nav a {
-    color: #a0a0b8;
-    text-decoration: none;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.2s;
-    border: 1px solid #333;
-  }
-
-  nav a:hover, nav a:focus {
-    color: #fff;
-    background: #e94560;
-    border-color: #e94560;
-  }
+  .page { display: none; }
+  .page.active { display: block; }
 
   /* Sections */
-  .comparison-section {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 48px 24px;
-    border-bottom: 1px solid #1a1a2e;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 32px;
-  }
-
-  .section-number {
-    background: linear-gradient(135deg, #e94560, #c23152);
-    color: #fff;
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  .section-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #fff;
-  }
-
-  .section-header h2 span {
-    color: #a0a0b8;
-    font-weight: 400;
-    font-size: 1rem;
-  }
+  .comparison-section, .analysis-section { max-width: 1600px; margin: 0 auto; padding: 48px 24px; border-bottom: 1px solid #1a1a2e; }
+  .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+  .section-number { background: linear-gradient(135deg, #e94560, #c23152); color: #fff; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 700; flex-shrink: 0; }
+  .section-header h2 { font-size: 1.5rem; font-weight: 600; color: #fff; }
+  .section-header h2 span { color: #a0a0b8; font-weight: 400; font-size: 1rem; }
 
   /* Video Grid */
-  .video-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-  }
+  .video-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  @media (max-width: 1200px) { .video-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 900px) { .video-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .video-grid { grid-template-columns: 1fr; } }
+  .video-card { background: #14141e; border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: border-color 0.2s, transform 0.2s; }
+  .video-card:hover { border-color: #e94560; transform: translateY(-2px); }
+  .video-card video { width: 100%; display: block; background: #000; aspect-ratio: 16/9; object-fit: contain; }
+  .video-label { padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+  .tool-badge { font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .tool-badge.original { background: #1a3a1a; color: #4ade80; }
+  .tool-badge.cartwheel { background: #3a2a1a; color: #fbbf24; }
+  .tool-badge.deepmotion { background: #1a2a3a; color: #60a5fa; }
+  .tool-badge.pinoc { background: #3a1a2a; color: #f472b6; }
+  .tool-badge.plask { background: #2a1a3a; color: #a78bfa; }
+  .tool-badge.quickmagic { background: #1a3a3a; color: #2dd4bf; }
+  .tool-badge.radical { background: #3a1a1a; color: #f87171; }
+  .tool-badge.rokoko { background: #2a2a1a; color: #d4d42d; }
+  .video-filename { font-size: 0.85rem; color: #888; }
+  .play-controls { display: flex; gap: 10px; margin-bottom: 20px; }
+  .btn { padding: 8px 20px; border: 1px solid #444; background: #1a1a2e; color: #e0e0e0; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
+  .btn:hover { background: #e94560; border-color: #e94560; color: #fff; }
 
-  @media (max-width: 1200px) {
-    .video-grid { grid-template-columns: repeat(3, 1fr); }
-  }
+  /* Analysis Styles */
+  .analysis-section h3 { font-size: 1.3rem; color: #e94560; margin: 32px 0 16px; font-weight: 600; }
+  .analysis-section h3:first-child { margin-top: 0; }
+  .analysis-section h4 { font-size: 1.05rem; color: #60a5fa; margin: 20px 0 10px; }
+  .analysis-section p { margin-bottom: 12px; color: #ccc; line-height: 1.7; }
+  .analysis-section strong { color: #fff; }
 
-  @media (max-width: 900px) {
-    .video-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+  /* Analysis Cards */
+  .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin: 20px 0; }
+  .analysis-card { background: #14141e; border: 1px solid #222; border-radius: 12px; padding: 24px; transition: border-color 0.2s; }
+  .analysis-card:hover { border-color: #e94560; }
+  .analysis-card h4 { margin-top: 0; color: #fff; font-size: 1.1rem; }
+  .analysis-card .card-subtitle { font-size: 0.8rem; color: #888; margin-bottom: 12px; }
+  .analysis-card ul { padding-left: 18px; margin: 8px 0; }
+  .analysis-card li { margin-bottom: 6px; color: #bbb; font-size: 0.9rem; }
+  .analysis-card li strong { color: #e0e0e0; }
 
-  @media (max-width: 560px) {
-    .video-grid { grid-template-columns: 1fr; }
-  }
+  /* SWOT Grid */
+  .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0 28px; }
+  @media (max-width: 700px) { .swot-grid { grid-template-columns: 1fr; } }
+  .swot-box { padding: 20px; border-radius: 10px; }
+  .swot-box h5 { font-size: 0.95rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  .swot-box ul { padding-left: 16px; }
+  .swot-box li { font-size: 0.88rem; margin-bottom: 5px; }
+  .swot-s { background: #0d2818; border: 1px solid #166534; }
+  .swot-s h5 { color: #4ade80; }
+  .swot-s li { color: #a7f3d0; }
+  .swot-w { background: #2d1215; border: 1px solid #991b1b; }
+  .swot-w h5 { color: #f87171; }
+  .swot-w li { color: #fca5a5; }
+  .swot-o { background: #1a1a06; border: 1px solid #854d0e; }
+  .swot-o h5 { color: #fbbf24; }
+  .swot-o li { color: #fde68a; }
+  .swot-t { background: #1a0a1e; border: 1px solid #6b21a8; }
+  .swot-t h5 { color: #c084fc; }
+  .swot-t li { color: #d8b4fe; }
 
-  .video-card {
-    background: #14141e;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #222;
-    transition: border-color 0.2s, transform 0.2s;
-  }
+  /* Tables */
+  .data-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.88rem; }
+  .data-table th { background: #1a1a2e; color: #e94560; padding: 12px 14px; text-align: left; border-bottom: 2px solid #333; font-weight: 600; position: sticky; top: 0; }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid #1a1a2e; color: #ccc; }
+  .data-table tr:hover td { background: #14141e; }
+  .data-table .highlight { color: #4ade80; font-weight: 600; }
 
-  .video-card:hover {
-    border-color: #e94560;
-    transform: translateY(-2px);
-  }
+  /* Porter's diagram */
+  .porter-container { display: flex; flex-direction: column; align-items: center; gap: 16px; margin: 24px 0; }
+  .porter-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .porter-box { background: #14141e; border: 1px solid #333; border-radius: 12px; padding: 20px; width: 280px; text-align: center; transition: border-color 0.2s; }
+  .porter-box:hover { border-color: #e94560; }
+  .porter-box h5 { color: #e94560; font-size: 0.95rem; margin-bottom: 8px; }
+  .porter-box .force-level { font-size: 0.8rem; padding: 2px 12px; border-radius: 10px; display: inline-block; margin-bottom: 10px; }
+  .force-high { background: #3a1a1a; color: #f87171; }
+  .force-med { background: #2a2a0a; color: #fbbf24; }
+  .force-low { background: #0d2818; color: #4ade80; }
+  .porter-box p { font-size: 0.85rem; color: #aaa; }
 
-  .video-card video {
-    width: 100%;
-    display: block;
-    background: #000;
-    aspect-ratio: 16/9;
-    object-fit: contain;
-  }
+  /* Perceptual Map */
+  .perceptual-map { position: relative; width: 100%; max-width: 700px; height: 500px; margin: 24px auto; background: #14141e; border: 1px solid #333; border-radius: 12px; overflow: hidden; }
+  .map-axis-x { position: absolute; top: 50%; left: 5%; right: 5%; height: 1px; background: #444; }
+  .map-axis-y { position: absolute; left: 50%; top: 5%; bottom: 5%; width: 1px; background: #444; }
+  .map-label { position: absolute; font-size: 0.75rem; color: #666; font-weight: 600; text-transform: uppercase; }
+  .map-label.top { top: 8px; left: 50%; transform: translateX(-50%); }
+  .map-label.bottom { bottom: 8px; left: 50%; transform: translateX(-50%); }
+  .map-label.left { left: 8px; top: 50%; transform: translateY(-50%); }
+  .map-label.right { right: 8px; top: 50%; transform: translateY(-50%); }
+  .map-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; transform: translate(-50%, -50%); cursor: default; transition: transform 0.2s; }
+  .map-dot:hover { transform: translate(-50%, -50%) scale(1.5); }
+  .map-dot-label { position: absolute; font-size: 0.7rem; color: #fff; white-space: nowrap; transform: translateX(-50%); text-align: center; font-weight: 600; }
 
-  .video-label {
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  /* AIDA funnel */
+  .aida-funnel { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 24px 0; }
+  .aida-stage { text-align: center; padding: 20px; color: #fff; font-weight: 600; }
+  .aida-stage p { font-weight: 400; font-size: 0.88rem; margin-top: 6px; color: rgba(255,255,255,0.85); }
 
-  .tool-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-  }
-
-  .tool-badge.original    { background: #1a3a1a; color: #4ade80; }
-  .tool-badge.cartwheel   { background: #3a2a1a; color: #fbbf24; }
-  .tool-badge.deepmotion  { background: #1a2a3a; color: #60a5fa; }
-  .tool-badge.pinoc       { background: #3a1a2a; color: #f472b6; }
-  .tool-badge.plask       { background: #2a1a3a; color: #a78bfa; }
-  .tool-badge.quickmagic  { background: #1a3a3a; color: #2dd4bf; }
-  .tool-badge.radical     { background: #3a1a1a; color: #f87171; }
-  .tool-badge.rokoko      { background: #2a2a1a; color: #d4d42d; }
-
-  .video-filename {
-    font-size: 0.85rem;
-    color: #888;
-  }
-
-  /* Play All Controls */
-  .play-controls {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .btn {
-    padding: 8px 20px;
-    border: 1px solid #444;
-    background: #1a1a2e;
-    color: #e0e0e0;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: all 0.2s;
-  }
-
-  .btn:hover {
-    background: #e94560;
-    border-color: #e94560;
-    color: #fff;
-  }
-
-  /* Back to top */
-  .back-to-top {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: #e94560;
-    color: #fff;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    font-size: 1.2rem;
-    box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
-    transition: transform 0.2s;
-    z-index: 50;
-  }
-
+  .back-to-top { position: fixed; bottom: 24px; right: 24px; background: #e94560; color: #fff; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4); transition: transform 0.2s; z-index: 50; }
   .back-to-top:hover { transform: scale(1.1); }
+
+  .source-list { margin-top: 16px; font-size: 0.8rem; color: #666; }
+  .source-list a { color: #60a5fa; text-decoration: none; }
+  .source-list a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Project PINOC</h1>
-  <p>Motion Capture Tool Comparison &mdash; 8 Tools &times; 10 Videos</p>
+  <p>AI Motion Capture Tool Comparison &amp; Marketing Analysis</p>
+  <div class="main-tabs">
+    <button class="main-tab active" onclick="showPage('videos')">Video Comparison</button>
+    <button class="main-tab" onclick="showPage('overview')">Tool Overview</button>
+    <button class="main-tab" onclick="showPage('stp')">STP Analysis</button>
+    <button class="main-tab" onclick="showPage('swot')">SWOT Analysis</button>
+    <button class="main-tab" onclick="showPage('aida')">AIDA Model</button>
+    <button class="main-tab" onclick="showPage('brand')">Brand Positioning</button>
+    <button class="main-tab" onclick="showPage('porter')">Porter's Five Forces</button>
+  </div>
 </header>
 
-<nav id="nav">
-  <a href="#section-1">Video 1</a>
-  <a href="#section-2">Video 2</a>
-  <a href="#section-3">Video 3</a>
-  <a href="#section-4">Video 4</a>
-  <a href="#section-5">Video 5</a>
-  <a href="#section-6">Video 6</a>
-  <a href="#section-7">Video 7</a>
-  <a href="#section-8">Video 8</a>
-  <a href="#section-9">Video 9</a>
+<!-- ============================== VIDEO COMPARISON PAGE ============================== -->
+<div id="page-videos" class="page active">
+<nav id="nav-videos">
+  <a href="#section-1">Video 1</a><a href="#section-2">Video 2</a><a href="#section-3">Video 3</a>
+  <a href="#section-4">Video 4</a><a href="#section-5">Video 5</a><a href="#section-6">Video 6</a>
+  <a href="#section-7">Video 7</a><a href="#section-8">Video 8</a><a href="#section-9">Video 9</a>
   <a href="#section-10">Video 10</a>
 </nav>
+<div id="video-sections"></div>
+</div>
 
+<!-- ============================== TOOL OVERVIEW PAGE ============================== -->
+<div id="page-overview" class="page">
+<div class="analysis-section">
+  <div class="section-header">
+    <div class="section-number" style="font-size:1rem;">i</div>
+    <h2>Tool Overview <span>&mdash; 7 AI Motion Capture Tools Compared</span></h2>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Tool</th><th>Founded</th><th>Core Tech</th><th>Input</th><th>Pricing (Entry)</th><th>Free Tier</th><th>Funding</th><th>Users</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Cartwheel</strong></td><td>2023</td><td>Proprietary motion AI</td><td>Text prompts</td><td>$150/mo</td><td>No</td><td>$15.6M</td><td>8K+ beta</td></tr>
+      <tr><td><strong>DeepMotion</strong></td><td>2014</td><td>Markerless video AI</td><td>Video / Text</td><td>$9/mo</td><td>Yes (60s/mo)</td><td>$2.2M</td><td>N/A</td></tr>
+      <tr><td><strong>Viggle AI (PINOC)</strong></td><td>2022</td><td>JST-1 physics model</td><td>Image + motion ref</td><td>$4.99/mo</td><td>Yes (5 vids/day)</td><td>$20M</td><td class="highlight">40M+</td></tr>
+      <tr><td><strong>Plask</strong></td><td>2020</td><td>Deep learning mocap</td><td>Video</td><td>$18/mo</td><td>Yes (15s/day)</td><td>$2.56M</td><td>150K+</td></tr>
+      <tr><td><strong>Quick Magic</strong></td><td>~2024</td><td>CV + physics grounding</td><td>Video</td><td>$9.99/mo</td><td>Yes (50 coins/mo)</td><td>N/A</td><td>N/A</td></tr>
+      <tr><td><strong>Radical Motion</strong></td><td>2017</td><td>AI + biomechanics</td><td>Video / Webcam</td><td>Tiered plans</td><td>Yes</td><td>Autodesk acquired</td><td>N/A</td></tr>
+      <tr><td><strong>Rokoko</strong></td><td>~2017</td><td>IMU suits + AI Vision</td><td>Hardware / Video</td><td>$20/mo (software)</td><td>Yes (starter)</td><td>N/A</td><td>60%+ solo creators</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- ============================== STP ANALYSIS PAGE ============================== -->
+<div id="page-stp" class="page">
+<div class="analysis-section">
+  <div class="section-header">
+    <div class="section-number">1</div>
+    <h2>STP Analysis <span>&mdash; Segmentation, Targeting, Positioning</span></h2>
+  </div>
+
+  <h3>Market Segmentation</h3>
+  <p>The AI motion capture market can be segmented across four key dimensions:</p>
+  <div class="analysis-grid">
+    <div class="analysis-card">
+      <h4>By User Type</h4>
+      <ul>
+        <li><strong>Social media creators</strong> &mdash; TikTok, Reels, YouTube Shorts makers needing quick, viral content</li>
+        <li><strong>Indie game developers</strong> &mdash; Solo or small teams building games with limited budgets</li>
+        <li><strong>Professional studios</strong> &mdash; VFX houses, animation studios, AAA game teams</li>
+        <li><strong>Hobbyists &amp; students</strong> &mdash; Learning animation, experimenting with 3D</li>
+        <li><strong>Enterprise / Film</strong> &mdash; Feature film production, advertising agencies</li>
+      </ul>
+    </div>
+    <div class="analysis-card">
+      <h4>By Budget Sensitivity</h4>
+      <ul>
+        <li><strong>Free-only users</strong> &mdash; Won't pay; need generous free tiers</li>
+        <li><strong>Budget-conscious</strong> &mdash; Will pay &lt;$20/mo for quality tools</li>
+        <li><strong>Mid-range professionals</strong> &mdash; $50&ndash;$150/mo for production tools</li>
+        <li><strong>Enterprise buyers</strong> &mdash; $1,500+/mo; ROI-driven decisions</li>
+      </ul>
+    </div>
+    <div class="analysis-card">
+      <h4>By Technical Skill</h4>
+      <ul>
+        <li><strong>Non-technical</strong> &mdash; Need simple upload-and-go workflows</li>
+        <li><strong>Semi-technical</strong> &mdash; Comfortable with basic 3D tools</li>
+        <li><strong>Expert</strong> &mdash; Need FBX/BVH export, pipeline integration, manual refinement</li>
+      </ul>
+    </div>
+    <div class="analysis-card">
+      <h4>By Use Case</h4>
+      <ul>
+        <li><strong>Entertainment / memes</strong> &mdash; Quick, fun, shareable content</li>
+        <li><strong>Game development</strong> &mdash; Character animation for game engines</li>
+        <li><strong>Film / VFX</strong> &mdash; Pre-visualization and motion reference</li>
+        <li><strong>VR / AR / XR</strong> &mdash; Real-time avatar animation</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Targeting Strategy by Tool</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>Tool</th><th>Primary Segment</th><th>Secondary Segment</th><th>Strategy Type</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Viggle AI</strong></td><td>Social media creators, meme culture</td><td>Indie animators, film previs</td><td>Mass market (undifferentiated)</td></tr>
+      <tr><td><strong>Cartwheel</strong></td><td>Professional studios, enterprise</td><td>Experienced indie devs</td><td>Concentrated (niche)</td></tr>
+      <tr><td><strong>DeepMotion</strong></td><td>Indie devs, semi-technical creators</td><td>Studios needing video-to-3D</td><td>Differentiated (multi-segment)</td></tr>
+      <tr><td><strong>Plask</strong></td><td>Indie devs, 3D artists</td><td>Small studios</td><td>Differentiated</td></tr>
+      <tr><td><strong>Quick Magic</strong></td><td>Budget-conscious animators</td><td>Indie game devs</td><td>Cost leadership</td></tr>
+      <tr><td><strong>Radical Motion</strong></td><td>Accessibility-first creators</td><td>Collaborative teams</td><td>Niche (browser-only)</td></tr>
+      <tr><td><strong>Rokoko</strong></td><td>Solo creators, indie devs</td><td>Small studios, educators</td><td>Differentiated (hardware + software)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Positioning</h3>
+  <p>Each tool occupies a distinct position in the market based on <strong>price</strong> vs. <strong>professional quality</strong>:</p>
+  <div class="analysis-grid">
+    <div class="analysis-card"><h4>Viggle AI (PINOC)</h4><p>"The viral animation engine." Positioned as the easiest, most fun way to animate characters &mdash; targeting entertainment-first creators with physics-based realism and zero learning curve. 40M users in under a year proves mass-market appeal.</p></div>
+    <div class="analysis-card"><h4>Cartwheel</h4><p>"Studio-grade AI animation." The premium positioning &mdash; backed by Pixar/DreamWorks beta testers and $15.6M in VC funding. Claims 100x faster generation for professional workflows. No free tier reinforces premium perception.</p></div>
+    <div class="analysis-card"><h4>DeepMotion</h4><p>"Proven video-to-3D conversion." The veteran with 11+ years of track record. Positions as the reliable, multi-purpose tool with freemium accessibility and multi-person tracking.</p></div>
+    <div class="analysis-card"><h4>Plask</h4><p>"Browser-based mocap studio." Positioned between hobbyist and professional, offering strong body accuracy and AI lighting controls. The 150K+ user base validates product-market fit.</p></div>
+    <div class="analysis-card"><h4>Quick Magic</h4><p>"Best value in motion capture." Competes on physics-aware foot grounding and hand tracking at the lowest price point ($9.99/mo). The underdog challenger targeting price-sensitive creators.</p></div>
+    <div class="analysis-card"><h4>Radical Motion</h4><p>"Zero-barrier mocap." Was positioned as the most accessible option (browser + webcam only). Now being absorbed into Autodesk's ecosystem &mdash; technology lives on, product dies (shutdown July 2026).</p></div>
+    <div class="analysis-card"><h4>Rokoko</h4><p>"The creator's mocap ecosystem." Unique hardware + software positioning with IMU suits at 50% less than enterprise alternatives. 60%+ solo creator user base and no subscription lock-in differentiate from pure software competitors.</p></div>
+  </div>
+</div>
+</div>
+
+<!-- ============================== SWOT ANALYSIS PAGE ============================== -->
+<div id="page-swot" class="page">
+<nav id="nav-swot">
+  <a href="#swot-viggle" onclick="scrollToEl('swot-viggle')">Viggle AI</a>
+  <a href="#swot-cartwheel" onclick="scrollToEl('swot-cartwheel')">Cartwheel</a>
+  <a href="#swot-deepmotion" onclick="scrollToEl('swot-deepmotion')">DeepMotion</a>
+  <a href="#swot-plask" onclick="scrollToEl('swot-plask')">Plask</a>
+  <a href="#swot-quickmagic" onclick="scrollToEl('swot-quickmagic')">Quick Magic</a>
+  <a href="#swot-radical" onclick="scrollToEl('swot-radical')">Radical Motion</a>
+  <a href="#swot-rokoko" onclick="scrollToEl('swot-rokoko')">Rokoko</a>
+</nav>
+<div class="analysis-section">
+  <div class="section-header">
+    <div class="section-number">2</div>
+    <h2>SWOT Analysis <span>&mdash; Strengths, Weaknesses, Opportunities, Threats</span></h2>
+  </div>
+
+  <!-- Viggle SWOT -->
+  <h3 id="swot-viggle">Viggle AI (PINOC)</h3>
+  <div class="swot-grid">
+    <div class="swot-box swot-s"><h5>Strengths</h5><ul><li>40M users in &lt;1 year &mdash; explosive viral growth</li><li>$20M funding from Andreessen Horowitz (a16z)</li><li>JST-1 physics engine creates realistic motion</li><li>8,000+ dance template library drives engagement</li><li>2nd largest AI Discord (4.1M members)</li><li>Free tier lowers barrier to entry</li></ul></div>
+    <div class="swot-box swot-w"><h5>Weaknesses</h5><ul><li>Free tier limited (5 vids/day, watermarked)</li><li>Short clip length constraints</li><li>Perceived as "meme tool" &mdash; weak enterprise credibility</li><li>App stability issues reported by users</li><li>Mixed reviews (4.8/5 app stores vs. 2.15/5 MouthShut)</li></ul></div>
+    <div class="swot-box swot-o"><h5>Opportunities</h5><ul><li>Expand into professional film/game previs market</li><li>Real-time livestream (Viggle LIVE) opens VTuber market</li><li>Enterprise API for studio integration</li><li>Partnerships with TikTok/Meta for creator tools</li></ul></div>
+    <div class="swot-box swot-t"><h5>Threats</h5><ul><li>OpenAI Sora and competitors entering video generation</li><li>Copyright/likeness legal challenges</li><li>Low switching costs &mdash; users can leave easily</li><li>Platform dependency on social media trends</li></ul></div>
+  </div>
+
+  <!-- Cartwheel SWOT -->
+  <h3 id="swot-cartwheel">Cartwheel</h3>
+  <div class="swot-grid">
+    <div class="swot-box swot-s"><h5>Strengths</h5><ul><li>Proprietary motion engine (not adapted from LLMs)</li><li>100x faster animation generation claimed</li><li>Beta tested by Pixar, DreamWorks, Roblox, Duolingo</li><li>$15.6M funding (Craft Ventures, Accel, Khosla)</li><li>Text-to-3D &mdash; no video input needed</li></ul></div>
+    <div class="swot-box swot-w"><h5>Weaknesses</h5><ul><li>No free tier &mdash; $150/mo minimum</li><li>Newly launched (May 2025), limited track record</li><li>Multi-body physics still requires manual refinement</li><li>Small user base relative to competitors</li></ul></div>
+    <div class="swot-box swot-o"><h5>Opportunities</h5><ul><li>Dominate text-to-3D animation niche</li><li>Expand to real-time game engine integration</li><li>Enterprise licensing for AAA studios</li></ul></div>
+    <div class="swot-box swot-t"><h5>Threats</h5><ul><li>Well-funded competitors (Viggle, Runway)</li><li>Studios building in-house AI tools</li><li>High pricing limits adoption velocity</li></ul></div>
+  </div>
+
+  <!-- DeepMotion SWOT -->
+  <h3 id="swot-deepmotion">DeepMotion</h3>
+  <div class="swot-grid">
+    <div class="swot-box swot-s"><h5>Strengths</h5><ul><li>11+ years of operation &mdash; proven stability</li><li>Team from Blizzard, Pixar, Disney, Roblox</li><li>Markerless capture from any video</li><li>Multi-person tracking (up to 4 people)</li><li>Freemium model drives adoption</li></ul></div>
+    <div class="swot-box swot-w"><h5>Weaknesses</h5><ul><li>Output quality depends on input video quality</li><li>Face/hand tracking still in beta</li><li>Lacks subtlety for nuanced emotional expressions</li><li>Free tier limited to 60 sec/month</li></ul></div>
+    <div class="swot-box swot-o"><h5>Opportunities</h5><ul><li>Text-to-3D (SayMotion) expands use cases</li><li>Mobile AR/VR market growth</li><li>Enterprise partnerships with game engines</li></ul></div>
+    <div class="swot-box swot-t"><h5>Threats</h5><ul><li>Newer, faster competitors (Cartwheel, Viggle)</li><li>AI video generators making mocap less necessary</li><li>Limited funding ($2.2M) vs. well-funded rivals</li></ul></div>
+  </div>
+
+  <!-- Plask SWOT -->
+  <h3 id="swot-plask">Plask</h3>
+  <div class="swot-grid">
+    <div class="swot-box swot-s"><h5>Strengths</h5><ul><li>150K+ active users validating product-market fit</li><li>Strong body animation accuracy from standard cameras</li><li>AI-powered lighting and camera controls</li><li>Integrates with Unreal, Maya, Blender</li><li>Backed by Smilegate, Naver, KT Investment</li></ul></div>
+    <div class="swot-box swot-w"><h5>Weaknesses</h5><ul><li>Struggles with fast/complex movements (twitching)</li><li>Premium pricing scales steeply ($140/mo for 1hr)</li><li>Limited features for large-scale projects</li></ul></div>
+    <div class="swot-box swot-o"><h5>Opportunities</h5><ul><li>Korean gaming/entertainment market growth</li><li>Expansion into real-time virtual production</li><li>AI-assisted post-processing pipeline</li></ul></div>
+    <div class="swot-box swot-t"><h5>Threats</h5><ul><li>Price competition from Quick Magic, DeepMotion</li><li>Larger players entering browser-based space</li><li>Free tools improving rapidly</li></ul></div>
+  </div>
+
+  <!-- Quick Magic SWOT -->
+  <h3 id="swot-quickmagic">Quick Magic</h3>
+  <div class="swot-grid">
+    <div class="swot-box swot-s"><h5>Strengths</h5><ul><li>Superior motion stability and foot grounding</li><li>Accurate hand/finger tracking</li><li>Lowest entry price ($9.99/mo)</li><li>Multiple export formats (FBX, BIP, MIXAMO, VMD)</li><li>Generous free tier (50 coins/month)</li></ul></div>
+    <div class="swot-box swot-w"><h5>Weaknesses</h5><ul><li>No disclosed funding or major backing</li><li>Small, unknown user base</li><li>Company background is opaque</li><li>Less integration depth with major 3D platforms</li></ul></div>
+    <div class="swot-box swot-o"><h5>Opportunities</h5><ul><li>Capture price-sensitive segment from Plask/DeepMotion</li><li>Partner with game engine marketplaces</li><li>Build community through tutorials and templates</li></ul></div>
+    <div class="swot-box swot-t"><h5>Threats</h5><ul><li>Larger funded competitors could undercut pricing</li><li>Lack of brand recognition limits growth</li><li>Platform risk if cloud infrastructure fails</li></ul></div>
+  </div>
+
+  <!-- Radical Motion SWOT -->
+  <h3 id="swot-radical">Radical Motion (RADiCAL)</h3>
+  <div class="swot-grid">
+    <div class="swot-box swot-s"><h5>Strengths</h5><ul><li>Single-camera, browser-based &mdash; lowest barrier</li><li>Real-time AI processing with instant feedback</li><li>Collaborative 3D scene design (Canvas)</li><li>Technology validated by Autodesk acquisition</li></ul></div>
+    <div class="swot-box swot-w"><h5>Weaknesses</h5><ul><li>Platform shutting down July 6, 2026</li><li>Lower precision than IMU/optical systems</li><li>Limited ecosystem integration</li><li>Small user base, limited reviews</li></ul></div>
+    <div class="swot-box swot-o"><h5>Opportunities</h5><ul><li>Technology lives on inside Autodesk ecosystem</li><li>Could power Maya/MotionBuilder AI features</li></ul></div>
+    <div class="swot-box swot-t"><h5>Threats</h5><ul><li>Product is being discontinued &mdash; no standalone future</li><li>Users must migrate to alternatives</li></ul></div>
+  </div>
+
+  <!-- Rokoko SWOT -->
+  <h3 id="swot-rokoko">Rokoko</h3>
+  <div class="swot-grid">
+    <div class="swot-box swot-s"><h5>Strengths</h5><ul><li>Full ecosystem: suits + gloves + software + AI Vision</li><li>Affordable hardware ($2,745 vs. $5K+ competitors)</li><li>No subscription lock-in for hardware</li><li>60%+ user base are solo creators</li><li>Native integration with 8+ major DCC tools</li><li>40% indie creator discount on bundles</li></ul></div>
+    <div class="swot-box swot-w"><h5>Weaknesses</h5><ul><li>Hardware requirement adds upfront cost barrier</li><li>Lower precision than Xsens/Vicon enterprise systems</li><li>Requires post-processing cleanup</li><li>Smaller professional ecosystem</li></ul></div>
+    <div class="swot-box swot-o"><h5>Opportunities</h5><ul><li>VTuber and virtual production market explosion</li><li>AI Vision (dual-camera) reduces hardware dependency</li><li>Education and training partnerships</li></ul></div>
+    <div class="swot-box swot-t"><h5>Threats</h5><ul><li>Pure-software AI tools eliminating need for hardware</li><li>Xsens price drops could squeeze from above</li><li>Market shift toward cloud-based solutions</li></ul></div>
+  </div>
+</div>
+</div>
+
+<!-- ============================== AIDA MODEL PAGE ============================== -->
+<div id="page-aida" class="page">
+<div class="analysis-section">
+  <div class="section-header">
+    <div class="section-number">3</div>
+    <h2>AIDA Model <span>&mdash; Attention, Interest, Desire, Action</span></h2>
+  </div>
+
+  <p>The AIDA model explains how each tool moves potential customers from awareness to conversion. Here's how each tool performs across the funnel:</p>
+
+  <div class="aida-funnel">
+    <div class="aida-stage" style="background: linear-gradient(135deg, #e94560, #c23152); width: 100%; max-width: 900px; border-radius: 12px 12px 0 0;">
+      <h4 style="color:#fff; margin:0;">A &mdash; ATTENTION</h4>
+      <p>How does the tool first grab awareness?</p>
+    </div>
+    <div class="aida-stage" style="background: linear-gradient(135deg, #d63384, #a020a0); width: 85%; max-width: 765px;">
+      <h4 style="color:#fff; margin:0;">I &mdash; INTEREST</h4>
+      <p>What keeps users exploring?</p>
+    </div>
+    <div class="aida-stage" style="background: linear-gradient(135deg, #6f42c1, #4a1a8a); width: 70%; max-width: 630px;">
+      <h4 style="color:#fff; margin:0;">D &mdash; DESIRE</h4>
+      <p>What makes them want to use it?</p>
+    </div>
+    <div class="aida-stage" style="background: linear-gradient(135deg, #0f3460, #16213e); width: 55%; max-width: 495px; border-radius: 0 0 12px 12px;">
+      <h4 style="color:#fff; margin:0;">A &mdash; ACTION</h4>
+      <p>What converts them into paying users?</p>
+    </div>
+  </div>
+
+  <table class="data-table" style="margin-top: 32px;">
+    <thead>
+      <tr><th>Tool</th><th>Attention</th><th>Interest</th><th>Desire</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Viggle AI</strong></td>
+        <td>Viral TikTok/IG memes, "brainrot" videos, 4.1M Discord</td>
+        <td>8,000+ dance templates, instant results from any image</td>
+        <td>Physics-based realism (JST-1), Viggle LIVE for streaming</td>
+        <td>Free tier (5 vids/day) creates habit; $4.99/mo removes watermark</td>
+      </tr>
+      <tr>
+        <td><strong>Cartwheel</strong></td>
+        <td>TechCrunch coverage, Jeffrey Katzenberg backing, Pixar beta testers</td>
+        <td>Text-to-3D promise &mdash; "type what you want, get animation"</td>
+        <td>100x speed claim, studio-grade output quality</td>
+        <td>$150/mo targets committed professionals; no free tier friction</td>
+      </tr>
+      <tr>
+        <td><strong>DeepMotion</strong></td>
+        <td>11+ year reputation, team pedigree (Blizzard, Pixar, Disney)</td>
+        <td>Video-to-3D from any footage; multi-person tracking</td>
+        <td>90% keyframing reduction saves weeks of work</td>
+        <td>Free 60s/mo hooks users; $9/mo Starter is low commitment</td>
+      </tr>
+      <tr>
+        <td><strong>Plask</strong></td>
+        <td>Korean investor backing (Smilegate, Naver), 150K user count</td>
+        <td>Browser-based &mdash; no downloads; AI lighting controls</td>
+        <td>Professional output quality with seamless DCC integration</td>
+        <td>Free 15s/day trial; $18/mo annual plan for consistent use</td>
+      </tr>
+      <tr>
+        <td><strong>Quick Magic</strong></td>
+        <td>Word-of-mouth in animation communities, comparison reviews</td>
+        <td>Foot grounding demo videos show stability advantage</td>
+        <td>Hand/finger tracking accuracy; best-value pricing</td>
+        <td>Free 50 coins/mo; $9.99/mo is market's cheapest paid tier</td>
+      </tr>
+      <tr>
+        <td><strong>Radical Motion</strong></td>
+        <td>Autodesk acquisition news, "first-wave AI mocap" positioning</td>
+        <td>Browser + webcam only &mdash; truly zero hardware barrier</td>
+        <td>Real-time feedback, collaborative Canvas feature</td>
+        <td>Free plan available; but shutdown dampens conversion</td>
+      </tr>
+      <tr>
+        <td><strong>Rokoko</strong></td>
+        <td>Physical product (SmartSuit) stands out in software-heavy market</td>
+        <td>Full ecosystem demo (suit + gloves + software), 40% indie discount</td>
+        <td>No subscription lock-in; hardware ownership = asset</td>
+        <td>Free software starter; $2,745 suit = one-time investment argument</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Key Insight</h3>
+  <p><strong>Viggle AI dominates the top of the funnel</strong> (Attention) through viral social media &mdash; a strategy no competitor has matched. Cartwheel wins at the bottom (Action) by targeting already-convinced professionals. The middle tools (DeepMotion, Plask, Quick Magic) compete on the Interest-to-Desire transition through feature differentiation and pricing.</p>
+</div>
+</div>
+
+<!-- ============================== BRAND POSITIONING PAGE ============================== -->
+<div id="page-brand" class="page">
+<div class="analysis-section">
+  <div class="section-header">
+    <div class="section-number">4</div>
+    <h2>Brand Positioning &amp; Value Proposition <span>&mdash; Perceptual Map &amp; Competitive Position</span></h2>
+  </div>
+
+  <h3>Perceptual Map: Price vs. Professional Quality</h3>
+  <div class="perceptual-map">
+    <div class="map-axis-x"></div>
+    <div class="map-axis-y"></div>
+    <div class="map-label top">High Professional Quality</div>
+    <div class="map-label bottom">Consumer / Entertainment</div>
+    <div class="map-label left">Low Price</div>
+    <div class="map-label right">High Price</div>
+    <!-- Dots: left% = price position, top% = quality (inverted: lower top% = higher quality) -->
+    <div class="map-dot" style="left:85%; top:15%; background:#fbbf24;" title="Cartwheel"></div>
+    <div class="map-dot-label" style="left:85%; top:8%;">Cartwheel</div>
+    <div class="map-dot" style="left:65%; top:20%; background:#d4d42d;" title="Rokoko"></div>
+    <div class="map-dot-label" style="left:65%; top:13%;">Rokoko</div>
+    <div class="map-dot" style="left:35%; top:35%; background:#a78bfa;" title="Plask"></div>
+    <div class="map-dot-label" style="left:35%; top:28%;">Plask</div>
+    <div class="map-dot" style="left:25%; top:40%; background:#60a5fa;" title="DeepMotion"></div>
+    <div class="map-dot-label" style="left:25%; top:33%;">DeepMotion</div>
+    <div class="map-dot" style="left:20%; top:45%; background:#2dd4bf;" title="Quick Magic"></div>
+    <div class="map-dot-label" style="left:20%; top:38%;">Quick Magic</div>
+    <div class="map-dot" style="left:30%; top:50%; background:#f87171;" title="Radical Motion"></div>
+    <div class="map-dot-label" style="left:30%; top:55%;">Radical Motion</div>
+    <div class="map-dot" style="left:15%; top:70%; background:#f472b6;" title="Viggle AI"></div>
+    <div class="map-dot-label" style="left:15%; top:63%;">Viggle AI</div>
+  </div>
+
+  <h3>Value Proposition Statements</h3>
+  <div class="analysis-grid">
+    <div class="analysis-card" style="border-left: 3px solid #f472b6;">
+      <h4>Viggle AI (PINOC)</h4>
+      <div class="card-subtitle">For: Social media creators &amp; casual animators</div>
+      <p><strong>"Animate any character in seconds &mdash; no skills required."</strong></p>
+      <p>Unlike traditional mocap tools that require hardware, software expertise, and hours of work, Viggle lets anyone upload a photo and create physics-based animations instantly. The 8,000+ template library means trending content is always one click away.</p>
+    </div>
+    <div class="analysis-card" style="border-left: 3px solid #fbbf24;">
+      <h4>Cartwheel</h4>
+      <div class="card-subtitle">For: Professional studios &amp; enterprise</div>
+      <p><strong>"Describe the motion, get studio-quality 3D animation &mdash; 100x faster."</strong></p>
+      <p>Unlike video-based mocap tools limited by input footage, Cartwheel generates original animations from text prompts using a proprietary motion engine built by ex-OpenAI and Pixar engineers. Fully editable, exportable, production-ready.</p>
+    </div>
+    <div class="analysis-card" style="border-left: 3px solid #60a5fa;">
+      <h4>DeepMotion</h4>
+      <div class="card-subtitle">For: Indie developers &amp; content creators</div>
+      <p><strong>"Turn any video into professional 3D animation &mdash; no equipment needed."</strong></p>
+      <p>With 11+ years of R&amp;D and a team from Blizzard and Pixar, DeepMotion converts existing video footage into clean 3D animations with multi-person tracking, reducing keyframing labor by 90%.</p>
+    </div>
+    <div class="analysis-card" style="border-left: 3px solid #a78bfa;">
+      <h4>Plask</h4>
+      <div class="card-subtitle">For: 3D artists &amp; indie studios</div>
+      <p><strong>"Professional mocap in your browser &mdash; from any camera."</strong></p>
+      <p>Plask combines deep learning motion extraction with AI-powered lighting and camera controls, offering the most complete browser-based animation studio with direct export to Unreal, Maya, and Blender.</p>
+    </div>
+    <div class="analysis-card" style="border-left: 3px solid #2dd4bf;">
+      <h4>Quick Magic</h4>
+      <div class="card-subtitle">For: Budget-conscious animators</div>
+      <p><strong>"Rock-solid motion capture at the industry's lowest price."</strong></p>
+      <p>Quick Magic solves the #1 complaint with AI mocap &mdash; "floaty" animations &mdash; through physics-aware foot grounding and precise hand tracking, starting at just $9.99/month.</p>
+    </div>
+    <div class="analysis-card" style="border-left: 3px solid #f87171;">
+      <h4>Radical Motion</h4>
+      <div class="card-subtitle">For: Accessibility-first creators</div>
+      <p><strong>"Motion capture with nothing but a webcam and a browser."</strong></p>
+      <p>RADiCAL stripped mocap to its absolute minimum &mdash; real-time capture from any camera, in any browser. The technology was so promising Autodesk acquired it (April 2026). Standalone service ends July 2026.</p>
+    </div>
+    <div class="analysis-card" style="border-left: 3px solid #d4d42d;">
+      <h4>Rokoko</h4>
+      <div class="card-subtitle">For: Solo creators &amp; indie developers</div>
+      <p><strong>"Own your mocap studio &mdash; no subscriptions, no limits."</strong></p>
+      <p>Unlike software-only tools dependent on cloud credits, Rokoko's SmartSuit Pro II lets creators capture unlimited motion data they truly own, with free software and native integration with every major 3D tool.</p>
+    </div>
+  </div>
+
+  <h3>Competitive Differentiation Summary</h3>
+  <table class="data-table">
+    <thead><tr><th>Differentiator</th><th>Leader</th><th>Why It Matters</th></tr></thead>
+    <tbody>
+      <tr><td>Easiest to use</td><td class="highlight">Viggle AI</td><td>Lowest learning curve drives viral adoption</td></tr>
+      <tr><td>Highest output quality</td><td class="highlight">Cartwheel</td><td>Studio validation from Pixar/DreamWorks</td></tr>
+      <tr><td>Most affordable</td><td class="highlight">Quick Magic</td><td>$9.99/mo with generous free tier</td></tr>
+      <tr><td>Best for existing footage</td><td class="highlight">DeepMotion</td><td>Video-to-3D with multi-person tracking</td></tr>
+      <tr><td>Most stable output</td><td class="highlight">Rokoko</td><td>Hardware IMU data &gt; computer vision estimation</td></tr>
+      <tr><td>Zero hardware barrier</td><td class="highlight">Radical Motion</td><td>Browser + webcam is the absolute minimum</td></tr>
+      <tr><td>Best DCC integration</td><td class="highlight">Plask / Rokoko</td><td>Direct pipeline to Unreal, Maya, Blender</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- ============================== PORTER'S FIVE FORCES PAGE ============================== -->
+<div id="page-porter" class="page">
+<div class="analysis-section">
+  <div class="section-header">
+    <div class="section-number">5</div>
+    <h2>Porter's Five Forces <span>&mdash; AI Motion Capture Industry Analysis</span></h2>
+  </div>
+
+  <p>Porter's Five Forces framework reveals the competitive dynamics shaping the AI motion capture industry in 2026:</p>
+
+  <div class="porter-container">
+    <div class="porter-row">
+      <div class="porter-box">
+        <h5>Threat of New Entrants</h5>
+        <span class="force-level force-high">HIGH</span>
+        <p>Low capital requirements for software-only tools. Open-source AI models (pose estimation, diffusion) lower technical barriers. Well-funded AI labs (OpenAI, Google) could enter with superior resources. However, building accurate physics simulation and large user bases takes time.</p>
+      </div>
+    </div>
+    <div class="porter-row">
+      <div class="porter-box">
+        <h5>Bargaining Power of Suppliers</h5>
+        <span class="force-level force-low">LOW</span>
+        <p>Key "suppliers" are cloud compute providers (AWS, GCP) and AI model frameworks (PyTorch, TensorFlow) &mdash; all commoditized. GPU costs are declining. No single supplier holds pricing power over mocap tool makers. Exception: Rokoko depends on hardware component suppliers.</p>
+      </div>
+      <div class="porter-box" style="border-color: #e94560;">
+        <h5 style="color: #fff;">Industry Rivalry</h5>
+        <span class="force-level force-high">HIGH</span>
+        <p>7+ direct competitors with overlapping features. Low switching costs (most tools are subscription/credit-based). Rapid innovation cycles force constant feature parity. Price competition intensifying as Quick Magic and Viggle push floor downward. Consolidation beginning (Autodesk acquiring Radical Motion).</p>
+      </div>
+      <div class="porter-box">
+        <h5>Bargaining Power of Buyers</h5>
+        <span class="force-level force-high">HIGH</span>
+        <p>Buyers have many alternatives and near-zero switching costs. Free tiers from most tools increase buyer leverage. Professional studios can negotiate enterprise deals or build in-house. Price sensitivity is high among the largest segment (indie creators).</p>
+      </div>
+    </div>
+    <div class="porter-row">
+      <div class="porter-box">
+        <h5>Threat of Substitutes</h5>
+        <span class="force-level force-med">MEDIUM-HIGH</span>
+        <p>Traditional keyframe animation remains viable for quality-critical work. AI video generators (Sora, Runway, Kling) can create motion without 3D pipelines. Game engine built-in animation (Unreal MetaHuman, Unity Muse) reduces need for external tools. However, none fully replace markerless mocap for game/VR assets.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Strategic Implications</h3>
+  <div class="analysis-grid">
+    <div class="analysis-card">
+      <h4>For Viggle AI</h4>
+      <p>High rivalry and new entrants threaten the "fun/viral" positioning. Must build deeper moats: network effects (Discord community), exclusive content partnerships, and proprietary physics engine improvements. Consider enterprise expansion before competitors catch up.</p>
+    </div>
+    <div class="analysis-card">
+      <h4>For Cartwheel</h4>
+      <p>Premium pricing creates natural defense against price wars but limits growth. Must maintain quality leadership and deepen studio partnerships. Risk: if OpenAI/Google release text-to-3D animation, the proprietary engine advantage shrinks.</p>
+    </div>
+    <div class="analysis-card">
+      <h4>For DeepMotion</h4>
+      <p>Longevity (11 years) provides trust, but limited funding constrains growth. Must differentiate through video-input flexibility and multi-person tracking. Risk of being squeezed between Viggle (cheaper, more viral) and Cartwheel (higher quality).</p>
+    </div>
+    <div class="analysis-card">
+      <h4>For Rokoko</h4>
+      <p>Hardware moat protects against pure-software competitors but creates vulnerability as AI-only tools improve. Vision AI (dual-camera) is the strategic bridge &mdash; must succeed to stay relevant in an increasingly software-only market. Indie creator loyalty is a valuable asset.</p>
+    </div>
+  </div>
+
+  <h3>Industry Attractiveness Verdict</h3>
+  <p>The AI motion capture industry is <strong>moderately attractive</strong> but intensely competitive. Three of five forces are high (rivalry, buyer power, new entrants), meaning profitability pressure is significant. Winners will be those who build the strongest <strong>network effects</strong> (Viggle's 40M users), <strong>technology moats</strong> (Cartwheel's proprietary engine), or <strong>ecosystem lock-in</strong> (Rokoko's hardware + software). The Autodesk acquisition of Radical Motion signals the beginning of industry consolidation &mdash; expect more M&amp;A activity as larger players seek to integrate AI mocap into existing creative suites.</p>
+
+  <div class="source-list" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #222;">
+    <strong>Research Sources:</strong>
+    <a href="https://getcartwheel.com/">Cartwheel</a> |
+    <a href="https://www.deepmotion.com/">DeepMotion</a> |
+    <a href="https://viggle.ai/">Viggle AI</a> |
+    <a href="https://plask.ai/">Plask</a> |
+    <a href="https://www.quickmagic.ai/">Quick Magic</a> |
+    <a href="https://radicalmotion.com/">Radical Motion</a> |
+    <a href="https://www.rokoko.com/">Rokoko</a> |
+    <a href="https://techcrunch.com/">TechCrunch</a> |
+    <a href="https://betakit.com/">BetaKit</a> |
+    <a href="https://www.crunchbase.com/">Crunchbase</a>
+  </div>
+</div>
+</div>
+
+<!-- ============================== SCRIPTS ============================== -->
 <script>
-// Video file mapping: for each number 1-10, the 8 sources
+// Page switching
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToEl(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Video sections
 const tools = [
-  { name: "3D (Original)",  badge: "original",   folder: "10 Original Videos", file: n => `3D${n}.mp4` },
-  { name: "Cartwheel",      badge: "cartwheel",   folder: "Cartwheel",          file: n => {
-      // Handle trailing spaces in filenames for 2 and 5
-      if (n === 2 || n === 5) return `Cartwheel ${n} .mp4`;
-      return `Cartwheel ${n}.mp4`;
-    }
-  },
-  { name: "DeepMotion",     badge: "deepmotion",  folder: "Deepmotion",         file: n => `${n} DEEP.mp4` },
-  { name: "PINOC",          badge: "pinoc",       folder: "Pinoc",              file: n => `${n} PINOC.mp4` },
-  { name: "Plask",          badge: "plask",       folder: "Plask",              file: n => `Plask ${n}.mp4` },
-  { name: "Quick Magic",    badge: "quickmagic",  folder: "Quickmagic",         file: n => `Quick Magic ${n}.mp4` },
-  { name: "Radical Motion", badge: "radical",     folder: "Radical Motion",     file: n => `${n} RAD.mp4` },
-  { name: "Rokoko",         badge: "rokoko",      folder: "Rokoko",             file: n => `Rokoko ${n}.mp4` },
+  { name: "3D (Original)", badge: "original", folder: "10 Original Videos", file: n => `3D${n}.mp4` },
+  { name: "Cartwheel", badge: "cartwheel", folder: "Cartwheel", file: n => (n === 2 || n === 5) ? `Cartwheel ${n} .mp4` : `Cartwheel ${n}.mp4` },
+  { name: "DeepMotion", badge: "deepmotion", folder: "Deepmotion", file: n => `${n} DEEP.mp4` },
+  { name: "PINOC", badge: "pinoc", folder: "Pinoc", file: n => `${n} PINOC.mp4` },
+  { name: "Plask", badge: "plask", folder: "Plask", file: n => `Plask ${n}.mp4` },
+  { name: "Quick Magic", badge: "quickmagic", folder: "Quickmagic", file: n => `Quick Magic ${n}.mp4` },
+  { name: "Radical Motion", badge: "radical", folder: "Radical Motion", file: n => `${n} RAD.mp4` },
+  { name: "Rokoko", badge: "rokoko", folder: "Rokoko", file: n => `Rokoko ${n}.mp4` },
 ];
 
-function generateSections() {
-  const container = document.createElement('div');
-
+(function generateSections() {
+  const container = document.getElementById('video-sections');
   for (let n = 1; n <= 10; n++) {
     const section = document.createElement('div');
     section.className = 'comparison-section';
     section.id = `section-${n}`;
-
-    let cardsHTML = '';
-    tools.forEach(tool => {
-      const filename = tool.file(n);
-      const src = encodeURI(`${tool.folder}/${filename}`);
-      cardsHTML += `
-        <div class="video-card">
-          <video controls preload="metadata" src="${src}"></video>
-          <div class="video-label">
-            <span class="tool-badge ${tool.badge}">${tool.name}</span>
-            <span class="video-filename">${filename}</span>
-          </div>
-        </div>`;
+    let cards = '';
+    tools.forEach(t => {
+      const f = t.file(n);
+      cards += `<div class="video-card"><video controls preload="metadata" src="${encodeURI(t.folder+'/'+f)}"></video><div class="video-label"><span class="tool-badge ${t.badge}">${t.name}</span><span class="video-filename">${f}</span></div></div>`;
     });
-
-    section.innerHTML = `
-      <div class="section-header">
-        <div class="section-number">${n}</div>
-        <h2>Video ${n} <span>&mdash; Compare across all 8 tools</span></h2>
-      </div>
-      <div class="play-controls">
-        <button class="btn" onclick="playAll(${n})">&#9654; Play All</button>
-        <button class="btn" onclick="pauseAll(${n})">&#10074;&#10074; Pause All</button>
-        <button class="btn" onclick="restartAll(${n})">&#8635; Restart All</button>
-      </div>
-      <div class="video-grid">${cardsHTML}</div>`;
-
+    section.innerHTML = `<div class="section-header"><div class="section-number">${n}</div><h2>Video ${n} <span>&mdash; Compare across all 8 tools</span></h2></div><div class="play-controls"><button class="btn" onclick="playAll(${n})">&#9654; Play All</button><button class="btn" onclick="pauseAll(${n})">&#10074;&#10074; Pause All</button><button class="btn" onclick="restartAll(${n})">&#8635; Restart All</button></div><div class="video-grid">${cards}</div>`;
     container.appendChild(section);
   }
+})();
 
-  document.body.appendChild(container);
-}
-
-function getVideos(n) {
-  const section = document.getElementById(`section-${n}`);
-  return section ? section.querySelectorAll('video') : [];
-}
-
-function playAll(n) {
-  getVideos(n).forEach(v => v.play());
-}
-
-function pauseAll(n) {
-  getVideos(n).forEach(v => v.pause());
-}
-
-function restartAll(n) {
-  getVideos(n).forEach(v => { v.currentTime = 0; v.play(); });
-}
-
-generateSections();
+function getVideos(n) { const s = document.getElementById('section-'+n); return s ? s.querySelectorAll('video') : []; }
+function playAll(n) { getVideos(n).forEach(v => v.play()); }
+function pauseAll(n) { getVideos(n).forEach(v => v.pause()); }
+function restartAll(n) { getVideos(n).forEach(v => { v.currentTime = 0; v.play(); }); }
 </script>
 
-<a href="#nav" class="back-to-top" title="Back to top">&uarr;</a>
-
+<a href="#" class="back-to-top" title="Back to top">&uarr;</a>
 </body>
 </html>
