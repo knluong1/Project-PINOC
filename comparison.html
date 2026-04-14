@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project PINOC - Motion Capture Tool Comparison</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0a0a0f;
+    color: #e0e0e0;
+    line-height: 1.6;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 48px 24px;
+    text-align: center;
+    border-bottom: 2px solid #e94560;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+
+  header p {
+    color: #a0a0b8;
+    margin-top: 8px;
+    font-size: 1rem;
+  }
+
+  /* Navigation */
+  nav {
+    background: #12121a;
+    padding: 12px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    border-bottom: 1px solid #222;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    color: #a0a0b8;
+    text-decoration: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: 1px solid #333;
+  }
+
+  nav a:hover, nav a:focus {
+    color: #fff;
+    background: #e94560;
+    border-color: #e94560;
+  }
+
+  /* Sections */
+  .comparison-section {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    border-bottom: 1px solid #1a1a2e;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .section-number {
+    background: linear-gradient(135deg, #e94560, #c23152);
+    color: #fff;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .section-header h2 span {
+    color: #a0a0b8;
+    font-weight: 400;
+    font-size: 1rem;
+  }
+
+  /* Video Grid */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 1200px) {
+    .video-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 900px) {
+    .video-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 560px) {
+    .video-grid { grid-template-columns: 1fr; }
+  }
+
+  .video-card {
+    background: #14141e;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #222;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .video-card:hover {
+    border-color: #e94560;
+    transform: translateY(-2px);
+  }
+
+  .video-card video {
+    width: 100%;
+    display: block;
+    background: #000;
+    aspect-ratio: 16/9;
+    object-fit: contain;
+  }
+
+  .video-label {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tool-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .tool-badge.original    { background: #1a3a1a; color: #4ade80; }
+  .tool-badge.cartwheel   { background: #3a2a1a; color: #fbbf24; }
+  .tool-badge.deepmotion  { background: #1a2a3a; color: #60a5fa; }
+  .tool-badge.pinoc       { background: #3a1a2a; color: #f472b6; }
+  .tool-badge.plask       { background: #2a1a3a; color: #a78bfa; }
+  .tool-badge.quickmagic  { background: #1a3a3a; color: #2dd4bf; }
+  .tool-badge.radical     { background: #3a1a1a; color: #f87171; }
+  .tool-badge.rokoko      { background: #2a2a1a; color: #d4d42d; }
+
+  .video-filename {
+    font-size: 0.85rem;
+    color: #888;
+  }
+
+  /* Play All Controls */
+  .play-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    padding: 8px 20px;
+    border: 1px solid #444;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .btn:hover {
+    background: #e94560;
+    border-color: #e94560;
+    color: #fff;
+  }
+
+  /* Back to top */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #e94560;
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+    transition: transform 0.2s;
+    z-index: 50;
+  }
+
+  .back-to-top:hover { transform: scale(1.1); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Project PINOC</h1>
+  <p>Motion Capture Tool Comparison &mdash; 8 Tools &times; 10 Videos</p>
+</header>
+
+<nav id="nav">
+  <a href="#section-1">Video 1</a>
+  <a href="#section-2">Video 2</a>
+  <a href="#section-3">Video 3</a>
+  <a href="#section-4">Video 4</a>
+  <a href="#section-5">Video 5</a>
+  <a href="#section-6">Video 6</a>
+  <a href="#section-7">Video 7</a>
+  <a href="#section-8">Video 8</a>
+  <a href="#section-9">Video 9</a>
+  <a href="#section-10">Video 10</a>
+</nav>
+
+<script>
+// Video file mapping: for each number 1-10, the 8 sources
+const tools = [
+  { name: "3D (Original)",  badge: "original",   folder: "10 Original Videos", file: n => `3D${n}.mp4` },
+  { name: "Cartwheel",      badge: "cartwheel",   folder: "Cartwheel",          file: n => {
+      // Handle trailing spaces in filenames for 2 and 5
+      if (n === 2 || n === 5) return `Cartwheel ${n} .mp4`;
+      return `Cartwheel ${n}.mp4`;
+    }
+  },
+  { name: "DeepMotion",     badge: "deepmotion",  folder: "Deepmotion",         file: n => `${n} DEEP.mp4` },
+  { name: "PINOC",          badge: "pinoc",       folder: "Pinoc",              file: n => `${n} PINOC.mp4` },
+  { name: "Plask",          badge: "plask",       folder: "Plask",              file: n => `Plask ${n}.mp4` },
+  { name: "Quick Magic",    badge: "quickmagic",  folder: "Quickmagic",         file: n => `Quick Magic ${n}.mp4` },
+  { name: "Radical Motion", badge: "radical",     folder: "Radical Motion",     file: n => `${n} RAD.mp4` },
+  { name: "Rokoko",         badge: "rokoko",      folder: "Rokoko",             file: n => `Rokoko ${n}.mp4` },
+];
+
+function generateSections() {
+  const container = document.createElement('div');
+
+  for (let n = 1; n <= 10; n++) {
+    const section = document.createElement('div');
+    section.className = 'comparison-section';
+    section.id = `section-${n}`;
+
+    let cardsHTML = '';
+    tools.forEach(tool => {
+      const filename = tool.file(n);
+      const src = encodeURI(`${tool.folder}/${filename}`);
+      cardsHTML += `
+        <div class="video-card">
+          <video controls preload="metadata" src="${src}"></video>
+          <div class="video-label">
+            <span class="tool-badge ${tool.badge}">${tool.name}</span>
+            <span class="video-filename">${filename}</span>
+          </div>
+        </div>`;
+    });
+
+    section.innerHTML = `
+      <div class="section-header">
+        <div class="section-number">${n}</div>
+        <h2>Video ${n} <span>&mdash; Compare across all 8 tools</span></h2>
+      </div>
+      <div class="play-controls">
+        <button class="btn" onclick="playAll(${n})">&#9654; Play All</button>
+        <button class="btn" onclick="pauseAll(${n})">&#10074;&#10074; Pause All</button>
+        <button class="btn" onclick="restartAll(${n})">&#8635; Restart All</button>
+      </div>
+      <div class="video-grid">${cardsHTML}</div>`;
+
+    container.appendChild(section);
+  }
+
+  document.body.appendChild(container);
+}
+
+function getVideos(n) {
+  const section = document.getElementById(`section-${n}`);
+  return section ? section.querySelectorAll('video') : [];
+}
+
+function playAll(n) {
+  getVideos(n).forEach(v => v.play());
+}
+
+function pauseAll(n) {
+  getVideos(n).forEach(v => v.pause());
+}
+
+function restartAll(n) {
+  getVideos(n).forEach(v => { v.currentTime = 0; v.play(); });
+}
+
+generateSections();
+</script>
+
+<a href="#nav" class="back-to-top" title="Back to top">&uarr;</a>
+
+</body>
+</html>
